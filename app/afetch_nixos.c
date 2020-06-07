@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/statvfs.h>
 
 #define AUTHOR "Adhiraj Sirohi"
 #define VERSION "v1.0"
 #define GIT "https://github.com/Brutuski/A-Fetch"
 
-#define OS "Arch Linux"
+#define OS "NixOS"
 
 #define RED "\033[34m"
 #define GREEN "\033[32m"
@@ -53,7 +52,7 @@ void user() {
     char *user_name;
     user_name=(char *)malloc(10*sizeof(char));
     user_name = getlogin();
-    printf(RED"=============" OS "=============" RESET"\n\n");
+    printf(RED"===============" OS "=================" RESET"\n\n");
     printf(BOLD MAGENTA"  User:      "RESET NOBOLD); 
     printf(GREEN"%s", user_name, RESET);
     printf("\n");
@@ -136,13 +135,14 @@ void desktop_env(char* DE) {
 
 int main (int argc, char *argv[]) { 
     system("clear");
-    char *HOST = "hostname";
+    char *OS_VERSION = "nixos-version";
+    char *HOST = "cat /etc/hostname";
     char *KERNEL = "uname -rs";
-    char *PACKAGES = "pacman -Q | wc -l";
+    char *PACKAGES = "ls /nix/store/* | wc -l";
     char *USED_SPACE = "df -h / | tail -1 | awk '{print $3}' ";
     char *TOTAL_SPACE = "df -h / | tail -1 | awk '{print $2}' ";
     char *SHELL = "basename \"$SHELL\"";
-    char *UPTIME = "uptime -p | sed 's/up //'";
+    char *UPTIME = "uptime | awk -F, '{sub(\".*up \",x,$1);print $1}' | sed -e 's/^[ \t]*//'";
     char *DE = "echo $XDG_CURRENT_DESKTOP";
 
     if  (argc == 1) {

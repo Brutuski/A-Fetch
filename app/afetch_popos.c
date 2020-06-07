@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/statvfs.h>
 
 #define AUTHOR "Adhiraj Sirohi"
 #define VERSION "v1.0"
 #define GIT "https://github.com/Brutuski/A-Fetch"
 
-#define OS "Arch Linux"
+#define OS "Pop!_OS"
 
 #define RED "\033[34m"
 #define GREEN "\033[32m"
@@ -53,7 +52,7 @@ void user() {
     char *user_name;
     user_name=(char *)malloc(10*sizeof(char));
     user_name = getlogin();
-    printf(RED"=============" OS "=============" RESET"\n\n");
+    printf(RED"===============" OS "===============" RESET"\n\n");
     printf(BOLD MAGENTA"  User:      "RESET NOBOLD); 
     printf(GREEN"%s", user_name, RESET);
     printf("\n");
@@ -138,7 +137,7 @@ int main (int argc, char *argv[]) {
     system("clear");
     char *HOST = "hostname";
     char *KERNEL = "uname -rs";
-    char *PACKAGES = "pacman -Q | wc -l";
+    char *PACKAGES = "dpkg -l | wc -l";
     char *USED_SPACE = "df -h / | tail -1 | awk '{print $3}' ";
     char *TOTAL_SPACE = "df -h / | tail -1 | awk '{print $2}' ";
     char *SHELL = "basename \"$SHELL\"";
