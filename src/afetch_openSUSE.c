@@ -1,15 +1,15 @@
 #include "afetch.h"
 
-#define OS "Elementary OS"
+#define OS "OpenSUSE"
 
 void user() {
     char *user_name;
     user_name=(char *)malloc(10*sizeof(char));
     user_name = getlogin();
-    printf(RED"============" BOLD OS NOBOLD "============" RESET"\n\n");
-    printf(BOLD MAGENTA"  User:      "RESET NOBOLD); 
+    printf(RED"==============" BOLD OS NOBOLD "===============" RESET"\n\n");
+    printf(BOLD MAGENTA"  User:        "RESET NOBOLD); 
     printf(GREEN);
-    printf("%s %s", user_name, RESET);
+    printf("%s%s", user_name, RESET);
     printf("\n");
 }
 void host(char* HOST) {
@@ -17,9 +17,9 @@ void host(char* HOST) {
     FILE *fp = popen(HOST, "r");
     fscanf(fp, "%s", host_name);
     pclose(fp);
-    printf(BOLD MAGENTA"  Hostname:  "RESET NOBOLD); 
+    printf(BOLD MAGENTA"  Hostname:    "RESET NOBOLD); 
     printf(GREEN);
-    printf("%s %s", host_name, RESET);
+    printf("%s%s", host_name, RESET);
     printf("\n");
 }
 
@@ -28,9 +28,20 @@ void kernel(char* KERNEL) {
     FILE *fp = popen(KERNEL, "r");
     fscanf(fp, "%[^\n]", kernel_name);
     pclose(fp);
-    printf(BOLD MAGENTA"  Kernel:    "RESET NOBOLD);
+    printf(BOLD MAGENTA"  Kernel:      "RESET NOBOLD);
     printf(GREEN);
     printf("%s %s", kernel_name, RESET);
+    printf("\n");
+}
+
+void os_ver(char* OS_VER) {
+    char ver[50];
+    FILE *fp = popen(OS_VER, "r");
+    fscanf(fp, "%[^\n]", ver);
+    pclose(fp);
+    printf(BOLD MAGENTA"  OS Version:  "RESET NOBOLD);
+    printf(GREEN);
+    printf("%s %s", ver, RESET);
     printf("\n");
 }
 
@@ -39,7 +50,7 @@ void packages(char* PACKAGES) {
     FILE *fp = popen(PACKAGES, "r");
     fscanf(fp, "%d", &pacman);
     pclose(fp);
-    printf(BOLD MAGENTA"  Packages:  "RESET NOBOLD);
+    printf(BOLD MAGENTA"  Packages:    "RESET NOBOLD);
     printf(GREEN);
     printf("%d %s", pacman, RESET);
     printf("\n");
@@ -54,9 +65,9 @@ void space(char* USED_SPACE, char* TOTAL_SPACE) {
     FILE *fp2 = popen(TOTAL_SPACE, "r");
     fscanf(fp2, "%[^\n]", total);
     pclose(fp2);
-    printf(BOLD MAGENTA"  Root:      "RESET NOBOLD);
+    printf(BOLD MAGENTA"  Root:        "RESET NOBOLD);
     printf(GREEN);
-    printf("%s / %s %s", used, total,  RESET);
+    printf("%s / %s %s", used, total, RESET);
     printf("\n");
 }
 
@@ -65,8 +76,8 @@ void shell(char* SHELL) {
     FILE *fp = popen(SHELL, "r");
     fscanf(fp, "%s", shell_name);
     pclose(fp);
-    printf(BOLD MAGENTA"  Shell:     "RESET NOBOLD);
-    printf(GREEN); 
+    printf(BOLD MAGENTA"  Shell:       "RESET NOBOLD);
+    printf(GREEN);
     printf("%s %s", shell_name, RESET);
     printf("\n");
 }
@@ -76,8 +87,8 @@ void uptime(char* UPTIME) {
     FILE *fp = popen(UPTIME, "r");
     fscanf(fp, "%[^\n]", up);
     pclose(fp);
-    printf(BOLD MAGENTA"  Uptime:    "RESET NOBOLD);
-    printf(GREEN); 
+    printf(BOLD MAGENTA"  Uptime:      "RESET NOBOLD);
+    printf(GREEN);
     printf("%s %s", up, RESET);
     printf("\n");
 }
@@ -87,10 +98,10 @@ void desktop_env(char* DE) {
     FILE *fp = popen(DE, "r");
     fscanf(fp, "%s", de);
     pclose(fp);
-    printf(BOLD MAGENTA"  DE:        "RESET NOBOLD);
+    printf(BOLD MAGENTA"  DE:          "RESET NOBOLD);
     printf(GREEN);
     printf("%s %s", de, RESET);
-    printf(RED"\n\n===================================="RESET);
+    printf(RED"\n\n====================================="RESET);
     printf("\n");
 
 }
@@ -99,7 +110,8 @@ int main (int argc, char *argv[]) {
     system("clear");
     char *HOST = "hostname";
     char *KERNEL = "uname -rs";
-    char *PACKAGES = "dpkg -l | wc -l";
+    char *OS_VER = "lsb_release -d";
+    char *PACKAGES = "rpm -qa --last | wc -l";
     char *USED_SPACE = "df -h / | tail -1 | awk '{print $3}' ";
     char *TOTAL_SPACE = "df -h / | tail -1 | awk '{print $2}' ";
     char *SHELL = "basename \"$SHELL\"";
@@ -110,6 +122,7 @@ int main (int argc, char *argv[]) {
         user();
         host(HOST);
         kernel(KERNEL);
+        os_ver(OS_VER);
         packages(PACKAGES);
         space(USED_SPACE, TOTAL_SPACE);
         shell(SHELL);
